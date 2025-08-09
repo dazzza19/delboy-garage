@@ -4,35 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Delboy Garage</title>
-
-  <!-- ModelViewer for 3D avatar -->
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="module" src="assets/script.js"></script>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-  <!-- Link to your local stylesheet -->
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Welcome to Delboy's Garage</h1>
 
-    <!-- 3D Avatar -->
     <model-viewer
-      id="delAvatar"
       src="assets/del.glb"
-      alt="Delboy Avatar"
+      alt="Delboy's Van"
       auto-rotate
       camera-controls
-      animation-name="Idle"
       ar
-      style="width: 300px; height: 300px;"
+      style="width: 100%; height: 500px;"
     ></model-viewer>
 
-    <!-- Ask Del button -->
-    <button id="askDel">Ask Del</button>
-    <div id="response" class="response-box"></div>
-  </div>
+    <p>Delboy’s Garage is where we fix, fiddle, and fabricate with a bit of banter. Whether it’s a busted carb or a dodgy starter, we’ve got the tools and the attitude to sort it.</p>
 
-  <!-- Link to your local script -->
-  <script src="assets/script.js"></script>
+    <button onclick="startGarage()">Start Chatting with Mac</button>
+  </div>
 </body>
 </html>
