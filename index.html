@@ -17,8 +17,10 @@
 </head>
 <body>
 
+  <!-- 3D Canvas -->
   <div id="canvas"></div>
 
+  <!-- UI -->
   <div class="container">
     <h1>🔧 Del the Spanner 🔧</h1>
     <p>"Proper 'andy, innit?"</p>
@@ -38,7 +40,7 @@
     </div>
   </div>
 
-  <!-- ✅ Use ES Modules Correctly -->
+  <!-- ✅ Use Modern Three.js Modules -->
   <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.155/build/three.module.js';
     import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.155/examples/jsm/loaders/GLTFLoader.js';
@@ -70,7 +72,7 @@
       dirLight.position.set(5, 10, 5);
       scene.add(dirLight);
 
-      // 🔥 Load YOUR 3D Model
+      // Load 3D Model
       const loader = new GLTFLoader();
       loader.load('/assets/models/del.glb', (gltf) => {
         avatar = gltf.scene;
@@ -80,8 +82,8 @@
 
         // Animation
         mixer = new THREE.AnimationMixer(avatar);
-        if (gltf.animations.length) {
-          mixer.clipAction(gltf.animations[0]).play(); // Play first animation
+        if (gltf.animations.length > 0) {
+          mixer.clipAction(gltf.animations[0]).play(); // Play idle
         }
 
         // Animation loop
@@ -96,7 +98,7 @@
         console.log(`Model: ${Math.round(progress.loaded / progress.total * 100)}%`);
       }, (error) => {
         console.error("Failed to load del.glb", error);
-        alert("3D model failed to load. Check path: /assets/models/del.glb");
+        alert("3D model failed to load. Check: /assets/models/del.glb");
       });
     });
 
@@ -113,13 +115,20 @@
       }
 
       // Realistic causes
-      const causes = [
-        "Check brake fluid or battery",
-        "Inspect for leaks or worn parts",
-        "Scan for OBD2 error codes",
-        "Test alternator or starter",
-        "Listen for unusual noises"
-      ];
+      const causesList = {
+        "brake": ["🛑 Low brake fluid", "🔧 Worn pads", "💧 Leaking line", "⚙️ Master cylinder", "📯 ABS fault"],
+        "start": ["🔋 Dead battery", "⚙️ Starter motor", "⛽ Fuel pump", "🔑 Immobilizer", "🔌 Loose terminals"],
+        "noise": ["🔊 Engine knock", "🎵 Bearing whine", "🧨 Exhaust leak", "💢 Timing rattle", "🪛 Loose shield"],
+        "default": ["🔌 Scan OBD2", "🔋 Test battery", "🧰 Inspect parts", "🛢️ Check fluids", "🧹 Clean throttle"]
+      };
+
+      let causes = causesList.default;
+      for (let key in causesList) {
+        if (symptom.includes(key)) {
+          causes = causesList[key];
+          break;
+        }
+      }
 
       document.getElementById("causes").innerHTML = causes.map(c => `<li>${c}</li>`).join("");
 
@@ -132,7 +141,7 @@
 
       document.getElementById("results").style.display = "block";
 
-      // Optional: Speak
+      // Optional: Voice
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(
           `Right, your ${make} ${model}? Could be the ${causes[0]}. Check it now, guv'nor!`
